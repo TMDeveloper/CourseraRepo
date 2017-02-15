@@ -12,16 +12,14 @@
   <script src="scripts/app.js"></script>
 <body ng-app="lunchCheckerApp">
    <div class="container" ng-controller="lunchCheckerController">
-     <h1>Lunch Checker</h1>
+     <h1>Lunch Checker</h1><br>
+       <h4>I do NOT consider an empty item, i.e. ", , ," as an item towards the count.</h4>
          <div class="form-group">
              <input id="lunch-menu" type="text"
              placeholder="list comma separated dishes you usually have for lunch"
              class="form-control" ng-style="textBoxBorderColor" ng-model="lunchMenu">
          </div>
-         <div class="form-group">
-             
-             <!--The function checkIfTooMuch() does NOT consider empty items i.e. , , as an item towards to the count.-->
-             
+         <div class="form-group">             
              <button class="btn btn-default" 
              ng-click="checkIfTooMuch();">Check If Too Much</button>
          </div>

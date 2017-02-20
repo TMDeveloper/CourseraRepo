@@ -1,2 +1,2 @@
 # courseraRepo
-Repository for coursera Course Single Page Application with AngularsJS
+Repository for coursera course Single Page Web Applications with AngularsJS

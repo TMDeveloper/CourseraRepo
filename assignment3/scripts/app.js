@@ -13,11 +13,19 @@ function NarrowItDownController(MenuSearchService) {
     var narrowedList = this;
     
     narrowedList.getFoundItems = function (){
-        narrowedList.found = MenuSearchService.getMatchedMenuItems(narrowedList.searchTerm); 
-       /* narrowedList.noItemsInList = function () {
-        if(narrowedList.found.length == 0 || narrowedList.searchTerm == ""){
-            return true;
-        }*/
+        var promise = MenuSearchService.getMatchedMenuItems(narrowedList.searchTerm);
+		promise.then(function(response){
+			narrowedList.found = response;
+            narrowedList.noItemsInList = function () {
+            if(narrowedList.found == undefined || narrowedList.found.length == 0){
+                return true;
+            }
+        };
+            console.log(narrowedList.found);
+		})
+		.catch(function(error){
+			console.log("Something went wrong...", error);
+		});
     };
     
     narrowedList.removeItem = function (index){
@@ -45,7 +53,7 @@ function MenuSearchService($http, ApiBasePath) {
                     foundItems.push(allItems[i]);
                 }
             }
-            console.log("Item founded with search " +foundItems.length);
+            console.log("Item found with search " +foundItems.length);
             return foundItems;
         })
         .catch(function(error){
@@ -57,13 +65,21 @@ function MenuSearchService($http, ApiBasePath) {
     
 function FoundItemsDirective () {
    var ddo = {
+    restrict: 'E',
     templateUrl: 'foundItems.html',
     scope: {
-      found: '<foundList',
+      found: '<',
       onRemove: '&'
-    }
+    },
+      controller: FoundItemsDirectiveController,
+      controllerAs: "list",
+      bindToController: true
   };
   return ddo;
+}
+    
+function FoundItemsDirectiveController() {
+  var list = this;
 }
     
 })();

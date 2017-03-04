@@ -18,8 +18,8 @@
     <div class="form-group narrow-button">
       <button class="btn btn-primary" ng-click="narrowedList.getFoundItems()">Narrow It Down For Me!</button>
     </div>
-       
-    <found-items found-list="narrowedList" on-remove="narrowedList.removeItem(index)">
+    <br><br><br>   
+    <found-items found="narrowedList.found" on-remove="narrowedList.removeItem(index)">
     </found-items>
   </div>
 

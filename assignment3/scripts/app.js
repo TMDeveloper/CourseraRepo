@@ -4,7 +4,7 @@
 angular.module('NarrowItDownApp', [])
 .controller('NarrowItDownController', NarrowItDownController)
 .service('MenuSearchService', MenuSearchService)
-.directive('foundItems', foundItemsDirective)
+.directive('foundItems', FoundItemsDirective)
 .constant('ApiBasePath', "https://davids-restaurant.herokuapp.com");
     
 NarrowItDownController.$inject = ['MenuSearchService'];
@@ -13,21 +13,18 @@ function NarrowItDownController(MenuSearchService) {
     var narrowedList = this;
     
     narrowedList.getFoundItems = function (){
-        narrowedList.found = MenuSearchService.getMatchedMenuItems(narrowedList.searchTerm);
+        narrowedList.found = MenuSearchService.getMatchedMenuItems(narrowedList.searchTerm); 
+       /* narrowedList.noItemsInList = function () {
+        if(narrowedList.found.length == 0 || narrowedList.searchTerm == ""){
+            return true;
+        }*/
     };
     
     narrowedList.removeItem = function (index){
         narrowedList.found.splice(index,1);
-    };
-    
-    /*narrowedList.itemsInList = function () {
-        if(narrowedList.found.length == 0 || narrowedList.searchTerm ==""){
-            return true;
-        }
-    };*/
-
+    }; 
 }
-    
+        
 MenuSearchService.$inject = ['$http', 'ApiBasePath'];
 function MenuSearchService($http, ApiBasePath) {
     var service = this;
@@ -35,18 +32,20 @@ function MenuSearchService($http, ApiBasePath) {
     
     service.getMatchedMenuItems = function (searchTerm) {
         return $http({
+            restrict: 'E',
             method: 'GET',
             url: (ApiBasePath + "/menu_items.json")
         })
         .then(function (result) {
            var allItems = result.data.menu_items;
-            console.log(allItems.length);
+            foundItems = [];
+            console.log("All items are: " + allItems.length);
             for(var i=0; i< allItems.length; i++){
                 if(allItems[i].description.indexOf(searchTerm.toLowerCase()) != -1 ){
                     foundItems.push(allItems[i]);
                 }
             }
-            console.log(foundItems.length);
+            console.log("Item founded with search " +foundItems.length);
             return foundItems;
         })
         .catch(function(error){
@@ -56,15 +55,14 @@ function MenuSearchService($http, ApiBasePath) {
     };
 }
     
-function foundItemsDirective () {
+function FoundItemsDirective () {
    var ddo = {
     templateUrl: 'foundItems.html',
     scope: {
-      found: '<',
+      found: '<foundList',
       onRemove: '&'
     }
   };
-
   return ddo;
 }
     

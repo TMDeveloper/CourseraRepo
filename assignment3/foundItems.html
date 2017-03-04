@@ -1,11 +1,10 @@
 <!--<div class="loader">
 
 </div>-->
-
 <ul>
-  <li ng-repeat="item in narrowedList.found">
-    {{item.description}}
-    <button ng-click="narrowedList.onRemove({index: $index});">Don't want this one!</button>
+  <li ng-repeat="item in foundList.found">
+    {{item.name}}
+    <button ng-click="foundList.onRemove({index: $index});">Don't want this one!</button>
   </li>
+<!--<span class="error" ng-if="found.noItemsInList">Nothing found!</span>-->
 </ul>
-<div class="error" ng-if="narrowedList.itemsInList();">Nothing found</div>

@@ -13,6 +13,7 @@ function NarrowItDownController(MenuSearchService) {
     var narrowedList = this;
     narrowedList.getFoundItems = function (){
         narrowedList.noItems = false;
+        narrowedList.hasItems = false;
         narrowedList.found = [];
         if(narrowedList.searchTerm == undefined || narrowedList.searchTerm == ""){
             narrowedList.noItems = true;
@@ -21,6 +22,7 @@ function NarrowItDownController(MenuSearchService) {
         var promise = MenuSearchService.getMatchedMenuItems(narrowedList.searchTerm);
 		promise.then(function(response){
 			narrowedList.found = response;
+            narrowedList.hasItems = true;
 		})
 		.catch(function(error){
 			console.log("Something went wrong...", error);
@@ -29,6 +31,10 @@ function NarrowItDownController(MenuSearchService) {
     
     narrowedList.removeItem = function (index){
         narrowedList.found.splice(index,1);
+        if(narrowedList.found.length == 0){
+            narrowedList.noItems = true;
+            narrowedList.hasItems = false;
+        }
     }; 
 }
         
@@ -66,27 +72,11 @@ function FoundItemsDirective () {
     scope: {
       found: '<',
       onRemove: '&',
-      noItems: '<'
-    },
-      controller: FoundItemsDirectiveController,
-      controllerAs: "list",
-      bindToController: true
+      noItems: '<',
+      hasItems: '<'
+    }
   };
   return ddo;
 }
-    
-function FoundItemsDirectiveController() {
-  var list = this;
-  list.noItemsInList = function() {
-      if(list.noItems){
-          return true;
-      }
-      if(list.found !== undefined){
-          if(list.found.length == 0){
-          return true;
-          }
-      }  
-  };
-}
-    
+        
 })();

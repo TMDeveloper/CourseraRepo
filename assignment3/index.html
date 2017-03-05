@@ -19,9 +19,8 @@
       <button class="btn btn-primary" ng-click="narrowedList.getFoundItems()">Narrow It Down For Me!</button>
     </div>
     <br><br><br>   
-    <found-items found="narrowedList.found" no-items="narrowedList.noItems" on-remove="narrowedList.removeItem(index)">
+    <found-items found="narrowedList.found" no-items="narrowedList.noItems" has-items="narrowedList.hasItems" on-remove="narrowedList.removeItem(index)">
     </found-items>
   </div>
-
 </body>
 </html>

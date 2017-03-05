@@ -13,13 +13,12 @@ function NarrowItDownController(MenuSearchService) {
     var narrowedList = this;
     
     narrowedList.getFoundItems = function (){
+        if(narrowedList.searchTerm == ""){
+                return;
+           }
         var promise = MenuSearchService.getMatchedMenuItems(narrowedList.searchTerm);
 		promise.then(function(response){
 			narrowedList.found = response;
-            narrowedList.noItemsInList = function () {
-            if(narrowedList.found == undefined || narrowedList.found.length == 0){
-                return true;
-            }
         };
             console.log(narrowedList.found);
 		})
@@ -46,14 +45,11 @@ function MenuSearchService($http, ApiBasePath) {
         })
         .then(function (result) {
            var allItems = result.data.menu_items;
-            foundItems = [];
-            console.log("All items are: " + allItems.length);
             for(var i=0; i< allItems.length; i++){
                 if(allItems[i].description.indexOf(searchTerm.toLowerCase()) != -1 ){
                     foundItems.push(allItems[i]);
                 }
             }
-            console.log("Item found with search " +foundItems.length);
             return foundItems;
         })
         .catch(function(error){
@@ -80,6 +76,15 @@ function FoundItemsDirective () {
     
 function FoundItemsDirectiveController() {
   var list = this;
+    
+  list.noItemsInList = function() {
+      if(list.found !== undefined){
+          if(list.found.length == 0){
+          return true;
+          }
+      }  
+  };
+  
 }
     
 })();

@@ -11,20 +11,16 @@ NarrowItDownController.$inject = ['MenuSearchService'];
     
 function NarrowItDownController(MenuSearchService) {
     var narrowedList = this;
-    
     narrowedList.getFoundItems = function (){
-        if(narrowedList.searchTerm == ""){
-                return;
-           }
+        narrowedList.noItems = false;
+        narrowedList.found = [];
+        if(narrowedList.searchTerm == undefined || narrowedList.searchTerm == ""){
+            narrowedList.noItems = true;
+            return;
+        }
         var promise = MenuSearchService.getMatchedMenuItems(narrowedList.searchTerm);
 		promise.then(function(response){
 			narrowedList.found = response;
-            narrowedList.noItemsInList = function () {
-            if(narrowedList.found == undefined){
-                return true;
-            }
-        };
-            console.log(narrowedList.found);
 		})
 		.catch(function(error){
 			console.log("Something went wrong...", error);
@@ -69,7 +65,8 @@ function FoundItemsDirective () {
     templateUrl: 'foundItems.html',
     scope: {
       found: '<',
-      onRemove: '&'
+      onRemove: '&',
+      noItems: '<'
     },
       controller: FoundItemsDirectiveController,
       controllerAs: "list",
@@ -80,15 +77,16 @@ function FoundItemsDirective () {
     
 function FoundItemsDirectiveController() {
   var list = this;
-    
   list.noItemsInList = function() {
+      if(list.noItems){
+          return true;
+      }
       if(list.found !== undefined){
           if(list.found.length == 0){
           return true;
           }
       }  
   };
-  
 }
     
 })();

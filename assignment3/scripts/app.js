@@ -12,9 +12,9 @@ NarrowItDownController.$inject = ['MenuSearchService'];
 function NarrowItDownController(MenuSearchService) {
     var narrowedList = this;
     narrowedList.getFoundItems = function (){
+        narrowedList.found = [];
         narrowedList.noItems = false;
         narrowedList.hasItems = false;
-        narrowedList.found = [];
         if(narrowedList.searchTerm == undefined || narrowedList.searchTerm == ""){
             narrowedList.noItems = true;
             return;
@@ -22,7 +22,15 @@ function NarrowItDownController(MenuSearchService) {
         var promise = MenuSearchService.getMatchedMenuItems(narrowedList.searchTerm);
 		promise.then(function(response){
 			narrowedList.found = response;
-            narrowedList.hasItems = true;
+            if(narrowedList.found.length !== 0){
+                 narrowedList.hasItems = true;
+            }
+            else{
+                narrowedList.noItems = true;
+                return;
+            }
+               
+            
 		})
 		.catch(function(error){
 			console.log("Something went wrong...", error);
@@ -41,7 +49,6 @@ function NarrowItDownController(MenuSearchService) {
 MenuSearchService.$inject = ['$http', 'ApiBasePath'];
 function MenuSearchService($http, ApiBasePath) {
     var service = this;
-    var foundItems = [];
     
     service.getMatchedMenuItems = function (searchTerm) {
         return $http({
@@ -51,6 +58,7 @@ function MenuSearchService($http, ApiBasePath) {
         })
         .then(function (result) {
            var allItems = result.data.menu_items;
+            var foundItems = [];
             for(var i=0; i< allItems.length; i++){
                 if(allItems[i].description.indexOf(searchTerm.toLowerCase()) != -1 ){
                     foundItems.push(allItems[i]);

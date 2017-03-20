@@ -1,0 +1,18 @@
+<div id="main-content" class="container">
+
+     <h1 id="menu-categories-title" class="text-center">Registration Information</h2>
+
+    <div class="text-center" ng-if="!regInfoCtrl.user">Not Signed Up Yet. <a ui-sref="public.signUp">Sign up Now!</a></div>
+
+    <div ng-if="regInfoCtrl.user">
+     <div class="text-center">
+       Firstname: {{ regInfoCtrl.user.firstname}} <br>
+       Lastname: {{ regInfoCtrl.user.lastname}} <br>
+       Email: {{ regInfoCtrl.user.email}} <br>
+       Phone: {{ regInfoCtrl.user.phone }} <br>
+     </div>
+     <h2>Menu number (favorite dish) : {{ regInfoCtrl.user.menuNumber }}</h2><br>
+     <menu-item menu-item="regInfoCtrl.menuItem"></menu-item>
+     </div>
+
+</div>
